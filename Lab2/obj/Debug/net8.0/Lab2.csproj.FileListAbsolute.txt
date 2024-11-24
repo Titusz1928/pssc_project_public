@@ -260,3 +260,4 @@ C:\Users\Boros Titusz\RiderProjects\lab8_mysql_version\Lab2\obj\Debug\net8.0\ref
 C:\Users\Boros Titusz\RiderProjects\lab8_mysql_version\Lab2\obj\Debug\net8.0\Lab2.pdb
 C:\Users\Boros Titusz\RiderProjects\lab8_mysql_version\Lab2\obj\Debug\net8.0\Lab2.genruntimeconfig.cache
 C:\Users\Boros Titusz\RiderProjects\lab8_mysql_version\Lab2\obj\Debug\net8.0\ref\Lab2.dll
+C:\Users\Boros Titusz\RiderProjects\lab8_mysql_version\Lab2\obj\Debug\net8.0\Lab2.sourcelink.json

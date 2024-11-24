@@ -2,7 +2,7 @@
 using Lab2.Domain.Repositories;
 using Microsoft.Extensions.Logging;
 using Lab2.Domain.Operations;
-
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using static Lab2.Domain.Models.Order;
 using static Lab2.Domain.Models.OrderCreatedEvent;
 
@@ -65,8 +65,16 @@ namespace Lab2.Domain.Workflows
             UnvalidatedOrder unvalidatedOrderLine = new(command.InputOrderLines);
             
             IOrder order = new ValidateOrderOperation(checkProductExists).Transform(unvalidatedOrderLine);
+            Console.WriteLine("order validated \u2713");
             order = new CalculateOrderOperation().Transform(order,existingOrders);
-            order = new PayOrderOperation().Transform(order);
+            Console.WriteLine("price calculated \u2713");
+
+            Console.WriteLine("Confirm payment(Y/N)");
+            string option=Console.ReadLine();
+            if (option == "Y")
+            {
+                order = new PayOrderOperation().Transform(order);
+            }
 
             return order;
         }
