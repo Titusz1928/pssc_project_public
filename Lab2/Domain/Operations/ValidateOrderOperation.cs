@@ -7,10 +7,12 @@ namespace Lab2.Domain.Operations{
     internal sealed class ValidateOrderOperation : OrderOperation
     {
         private readonly Func<ProductId, bool> checkProductExists;
+        private readonly Func<ProductId, Task<Quantity>> GetAvailableStock;
         
-       internal ValidateOrderOperation(Func<ProductId, bool> checkProductExists)
+       internal ValidateOrderOperation(Func<ProductId, bool> checkProductExists, Func<ProductId, Task<Quantity>> getAvailableStock)
        {
            this.checkProductExists = checkProductExists;
+           this.GetAvailableStock = getAvailableStock;
        }
 
        protected override IOrder OnUnvalidated(UnvalidatedOrder unvalidatedOrder)
@@ -93,15 +95,37 @@ namespace Lab2.Domain.Operations{
        
        private Quantity? ValidateAndParseQuantity(UnvalidatedOrderLine unvalidatedOrderLine,
            List<string> validationErrors)
-       {
-           Quantity? quantity;
-           if (!Quantity.TryParse(unvalidatedOrderLine.Quantity, out quantity))
-           {
-               validationErrors.Add($"Invalid quantity: {unvalidatedOrderLine.ProductId}");
-           }
+{
+    Quantity? quantity;
+    if (!Quantity.TryParse(unvalidatedOrderLine.Quantity, out quantity))
+    {
+        validationErrors.Add($"Invalid quantity: {unvalidatedOrderLine.ProductId}");
+    }
+    else
+    {
+        // Convert ProductId string to ProductId type if needed
+        ProductId? productId = null;
+        if (!ProductId.TryParse(unvalidatedOrderLine.ProductId, out productId))
+        {
+            validationErrors.Add($"Invalid product ID: {unvalidatedOrderLine.ProductId}");
+        }
 
-           return quantity;
-       }
+        if (productId != null)
+        {
+            // Get the available stock for the productId
+            var availableStock = GetAvailableStock(productId!).Result; // Awaiting the result
+
+            if (availableStock != null && availableStock.Value < quantity.Value) // Compare the underlying int values
+            {
+                validationErrors.Add($"Insufficient stock for product: {unvalidatedOrderLine.ProductId}");
+            }
+        }
+    }
+
+    return quantity;
+}
+
+
        
        private Price? ValidateAndParsePrice(UnvalidatedOrderLine unvalidatedOrderLine,
            List<string> validationErrors)

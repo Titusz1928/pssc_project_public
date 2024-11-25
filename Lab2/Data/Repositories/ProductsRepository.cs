@@ -37,6 +37,23 @@ namespace Lab2.Data.Repositories
 
             return filteredProducts.Select(p => new ProductId(p.ProductId)).ToList();
         }
+        
+        public async Task<Quantity> GetAvailableStockAsync(IEnumerable<string> productIdsToCheck)
+        {
+            // First, fetch the products that match the product IDs into memory
+            var products = await dbContext.Products
+                .AsNoTracking()  // Avoid tracking for better performance
+                .ToListAsync();  // Fetch all products to memory
+    
+            // Now, filter the products in memory (client-side)
+            var product = products
+                .FirstOrDefault(p => productIdsToCheck.Contains(p.ProductId.ToString()));
+
+            // Return its quantity, or 0 if not found
+            return new Quantity(product?.Stoc ?? 0);  // Use null-coalescing to return 0 if the product is not found
+        }
+
+
 
 
         // Retrieve a product by its ID

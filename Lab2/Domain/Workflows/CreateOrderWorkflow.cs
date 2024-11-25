@@ -51,7 +51,7 @@ namespace Lab2.Domain.Workflows
             }
         }
 
-        private static Order.IOrder ExecuteBusinesslogic(
+        private  Order.IOrder ExecuteBusinesslogic(
             CreateOrderCommand command,
             List<ProductId> existingProducts,
             List<CalculatedOrderLine> existingOrders)
@@ -62,18 +62,63 @@ namespace Lab2.Domain.Workflows
                 bool exists = existingProducts.Any(s => s.Equals(code));
                 return exists;
             };
-            UnvalidatedOrder unvalidatedOrderLine = new(command.InputOrderLines);
             
-            IOrder order = new ValidateOrderOperation(checkProductExists).Transform(unvalidatedOrderLine);
-            Console.WriteLine("order validated \u2713");
-            order = new CalculateOrderOperation().Transform(order,existingOrders);
-            Console.WriteLine("price calculated \u2713");
-
-            Console.WriteLine("Confirm payment(Y/N)");
-            string option=Console.ReadLine();
-            if (option == "Y")
+            Func<ProductId, Task<Quantity>> GetAvailableStock = async productId =>
             {
-                order = new PayOrderOperation().Transform(order);
+                // Assuming the productId is being passed as a single ID, you can wrap it in an enumerable for the repository method
+                var productIdsToCheck = new List<string> { productId.ToString() };
+                return await productsRepository.GetAvailableStockAsync(productIdsToCheck);
+            };
+            
+            
+            UnvalidatedOrder unvalidatedOrderLine = new(command.InputOrderLines);
+            IOrder order = new ValidateOrderOperation(checkProductExists, GetAvailableStock).Transform(unvalidatedOrderLine);
+
+            // Check if the order is valid
+            if (order is Order.ValidatedOrder validatedOrder)
+            {
+                Console.WriteLine("Order validated \u2713");
+
+                // Proceed to calculate the price
+                order = new CalculateOrderOperation().Transform(order, existingOrders);
+    
+                // Check if the order is calculated
+                if (order is Order.CalculatedOrder calculatedOrder)
+                {
+                    Console.WriteLine("Price calculated \u2713");
+
+                    // Ask for payment confirmation
+                    Console.WriteLine("Confirm payment (Y/N)");
+                    string option = Console.ReadLine();
+
+                    // If payment is confirmed, proceed to the payment step
+                    if (option == "Y")
+                    {
+                        order = new PayOrderOperation().Transform(order);
+            
+                        // Check if the order has been paid
+                        if (order is Order.PayedOrder payedOrder)
+                        {
+                            Console.WriteLine("Payment completed \u2713");
+                        }
+                        else
+                        {
+                            Console.WriteLine("Payment failed");
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("Payment not confirmed. Order not completed.");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine("Order price calculation failed.");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Order validation failed.");
             }
 
             return order;

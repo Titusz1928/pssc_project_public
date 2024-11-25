@@ -11,6 +11,8 @@ namespace Lab2.Domain.Repositories
         
         Task<List<ProductId>> GetExistingProductsAsync(IEnumerable<string> productIdsToCheck);
 
+        Task<Quantity> GetAvailableStockAsync(IEnumerable<string> productIdsToCheck);
+
 
         // Retrieve a product by its ID
         Task<Product> GetProductByIdAsync(int productId);
