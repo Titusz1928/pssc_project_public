@@ -27,8 +27,8 @@ namespace Lab2.Domain.Workflows
             try
             {
                 //load state from database
-                IEnumerable<string> productsToCheck = command.InputOrderLines.Select(product => product.Code);
-                List<Code> existingProducts = await productsRepository.GetExistingProductsAsync(productsToCheck);
+                IEnumerable<string> productsToCheck = command.InputOrderLines.Select(product => product.ProductId);
+                List<ProductId> existingProducts = await productsRepository.GetExistingProductsAsync(productsToCheck);
                 List<CalculatedOrderLine> existingOrders = await orderlineRepository.GetExistingOrdersAsync();
 
                 //business logic
@@ -53,11 +53,11 @@ namespace Lab2.Domain.Workflows
 
         private static Order.IOrder ExecuteBusinesslogic(
             CreateOrderCommand command,
-            List<Code> existingProducts,
+            List<ProductId> existingProducts,
             List<CalculatedOrderLine> existingOrders)
         {
             
-            Func<Code, bool> checkProductExists = code =>
+            Func<ProductId, bool> checkProductExists = code =>
             {
                 bool exists = existingProducts.Any(s => s.Equals(code));
                 return exists;

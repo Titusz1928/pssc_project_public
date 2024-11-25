@@ -16,7 +16,7 @@ namespace Lab2
     internal class Program
     {
         
-        private static readonly string ConnectionString = "Server=localhost;Database=pssc;Uid=root;Pwd=iNdigo24H+9jq!Zy3;";
+        private static readonly string ConnectionString = "Server=localhost;Database=pssc2;Uid=root;Pwd=iNdigo24H+9jq!Zy3;";
 
 
         private static async Task Main(string[] args)
@@ -73,20 +73,15 @@ namespace Lab2
             List<UnvalidatedOrderLine> listOfGrades = [];
             do
             {
-                string? code = ReadValue("Product Code: ");
-                if (string.IsNullOrEmpty(code))
-                {
-                    break;
-                }
-
-                string? orderId = ReadValue("Order Id: ");
-                if (string.IsNullOrEmpty(orderId))
-                {
-                    break;
-                }
 
                 string? productId = ReadValue("Product Id: ");
                 if (string.IsNullOrEmpty(productId))
+                {
+                    break;
+                }
+                
+                string? orderId = ReadValue("Order Id: ");
+                if (string.IsNullOrEmpty(orderId))
                 {
                     break;
                 }
@@ -103,7 +98,7 @@ namespace Lab2
                     break;
                 }
 
-                listOfGrades.Add(new(code, orderId, productId,quantity,price));
+                listOfGrades.Add(new(orderId, productId,quantity,price));
             } while (true);
             return listOfGrades;
         }

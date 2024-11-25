@@ -29,7 +29,6 @@ namespace Lab2.Data.Repositories
 
             List<CalculatedOrderLine> foundOrdersModel = foundProductOrders.Select(result =>
                 new CalculatedOrderLine(
-                    Code: new Code(result.Code),
                     OrderId: new OrderId(result.OrderId),
                     ProductId: new ProductId(result.ProductId),
                     Quantity: new Quantity(result.Quantity),
@@ -59,7 +58,6 @@ namespace Lab2.Data.Repositories
             ).AsNoTracking().ToListAsync();
 
             return orderLines.Select(o => new PayedOrderLine(
-                Code: new Code(o.Code),
                 OrderId: new OrderId(o.OrderId),
                 ProductId: new ProductId(o.ProductId),
                 Quantity: new Quantity(o.Quantity),
@@ -93,7 +91,6 @@ namespace Lab2.Data.Repositories
             if (orderLine == null) return null;
 
             return new PayedOrderLine(
-                Code: new Code(orderLine.Code),
                 OrderId: new OrderId(orderLine.OrderId),
                 ProductId: new ProductId(orderLine.ProductId),
                 Quantity: new Quantity(orderLine.Quantity),
@@ -113,7 +110,6 @@ namespace Lab2.Data.Repositories
                 {
                     var orderLineDto = new OrderLineDto
                     {
-                        // Remove the OrderLineId as it's auto-generated
                         ProductId = orderLine.ProductId?.Value ?? 0, // Handle nullable values
                         Quantity = orderLine.Quantity?.Value ?? 0,  // Handle nullable values
                         Price = orderLine.Price?.Value ?? 0f,       // Handle nullable values

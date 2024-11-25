@@ -9,8 +9,7 @@ namespace Lab2.Domain.Repositories
         // Retrieve all products
         Task<List<Product>> GetAllProductsAsync();
         
-        //Retrieve a product by its Code
-        Task<List<Code>> GetExistingProductsAsync(IEnumerable<string> codesToCheck);
+        Task<List<ProductId>> GetExistingProductsAsync(IEnumerable<string> productIdsToCheck);
 
 
         // Retrieve a product by its ID

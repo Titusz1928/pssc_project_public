@@ -6,9 +6,9 @@ namespace Lab2.Domain.Operations{
 
     internal sealed class ValidateOrderOperation : OrderOperation
     {
-        private readonly Func<Code, bool> checkProductExists;
+        private readonly Func<ProductId, bool> checkProductExists;
         
-       internal ValidateOrderOperation(Func<Code, bool> checkProductExists)
+       internal ValidateOrderOperation(Func<ProductId, bool> checkProductExists)
        {
            this.checkProductExists = checkProductExists;
        }
@@ -48,7 +48,6 @@ namespace Lab2.Domain.Operations{
            List<string> validationErrors)
        {
            List<string> currentValidationErrors = [];
-           Code? code = ValidateAndParseCode(unvalidatedOrderLine,currentValidationErrors);
            OrderId? orderid = ValidateAndParseOrderId(unvalidatedOrderLine,currentValidationErrors);
            ProductId? productId = ValidateAndParseProductId(unvalidatedOrderLine,currentValidationErrors);
            Quantity? quantity = ValidateAndParseQuantity(unvalidatedOrderLine,currentValidationErrors);
@@ -57,26 +56,13 @@ namespace Lab2.Domain.Operations{
            ValidatedOrderLine? validOrderLine = null;
            if (!currentValidationErrors.Any())
            {
-               validOrderLine = new(code,orderid,productId,quantity,price);
+               validOrderLine = new(orderid,productId,quantity,price);
            }
            else
            {
                validationErrors.AddRange(currentValidationErrors);
            }
            return validOrderLine;
-       }
-
-       private Code? ValidateAndParseCode(UnvalidatedOrderLine unvalidatedOrderLine, List<string> validationErrors)
-       {
-           Code? code;
-           if (!Code.TryParse(unvalidatedOrderLine.Code, out code))
-           {
-               validationErrors.Add($"Invalid code: {unvalidatedOrderLine.Code}");
-           }else if (!checkProductExists(code!))
-           {
-               validationErrors.Add($"Product not found: {unvalidatedOrderLine.Code}");
-           }
-           return code;
        }
 
        private OrderId? ValidateAndParseOrderId(UnvalidatedOrderLine unvalidatedOrderLine,
@@ -89,6 +75,7 @@ namespace Lab2.Domain.Operations{
            }
            return orderId;
        }
+       
 
        private ProductId? ValidateAndParseProductId(UnvalidatedOrderLine unvalidatedOrderLine,
            List<string> validationErrors)
@@ -96,9 +83,11 @@ namespace Lab2.Domain.Operations{
            ProductId? productId;
            if (!ProductId.TryParse(unvalidatedOrderLine.ProductId, out productId))
            {
-               validationErrors.Add($"Invalid product id: {unvalidatedOrderLine.ProductId}");
+               validationErrors.Add($"Invalid code: {unvalidatedOrderLine.ProductId}");
+           }else if (!checkProductExists(productId!))
+           {
+               validationErrors.Add($"Product not found: {unvalidatedOrderLine.ProductId}");
            }
-
            return productId;
        }
        

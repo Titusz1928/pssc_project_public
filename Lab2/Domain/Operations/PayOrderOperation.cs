@@ -18,7 +18,7 @@ namespace Lab2.Domain.Operations{
         }
 
         private static string GenerateCsvLine(CalculatedOrderLine orderline) =>
-            $"{orderline.Code.Value}, {orderline.Quantity.Value}, {orderline.Total.Value}";
+            $"{orderline.ProductId.Value}, {orderline.Quantity.Value}, {orderline.Total.Value}";
     }
 
 }

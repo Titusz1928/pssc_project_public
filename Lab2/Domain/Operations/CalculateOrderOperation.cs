@@ -21,16 +21,15 @@ namespace Lab2.Domain.Operations
 
         private static CalculatedOrderLine CalculateAndMatchOrderLine(List<CalculatedOrderLine>? existingOrderLines, ValidatedOrderLine validOrderLine)
         {
-            // Find an existing order line that matches by Code
+            // Find an existing order line that matches by ProductId
             var existingOrderLine = existingOrderLines?.FirstOrDefault(
-                line => line.Code.ToString() == validOrderLine.Code.ToString());
+                line => line.ProductId.ToString() == validOrderLine.ProductId.ToString());
 
             // Calculate total price for the order line
             var total = CalculateTotal(validOrderLine);
 
             // Create a new CalculatedOrderLine
             return new CalculatedOrderLine(
-                validOrderLine.Code,
                 validOrderLine.OrderId,
                 validOrderLine.ProductId,
                 validOrderLine.Quantity,

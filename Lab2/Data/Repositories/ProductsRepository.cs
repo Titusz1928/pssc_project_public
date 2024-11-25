@@ -27,19 +27,17 @@ namespace Lab2.Data.Repositories
                 Stoc: dto.Stoc)).ToList();
         }
         
-        // Retrieve a product by its ID
-        public async Task<List<Code>> GetExistingProductsAsync(IEnumerable<string> codesToCheck)
+        public async Task<List<ProductId>> GetExistingProductsAsync(IEnumerable<string> productIdsToCheck)
         {
-            // Fetch all products from the database, but defer filtering to in-memory evaluation
-            List<ProductDto> products = await Task.Run(() =>
-                dbContext.Products
-                    .AsNoTracking()
-                    .AsEnumerable()  // Switch to in-memory evaluation
-                    .Where(product => codesToCheck.Contains(product.Code))  // In-memory filtering
-                    .ToList());  // Convert to list after in-memory filtering
+            var productIdsList = productIdsToCheck.ToList();  // Ensure it's a list
 
-            return products.Select(product => new Code(product.Code)).ToList();
+            // Fetch products and filter them in memory
+            var allProducts = await dbContext.Products.AsNoTracking().ToListAsync();  // Fetch all products
+            var filteredProducts = allProducts.Where(p => productIdsList.Contains(p.ProductId.ToString())).ToList(); // Perform filtering in memory
+
+            return filteredProducts.Select(p => new ProductId(p.ProductId)).ToList();
         }
+
 
         // Retrieve a product by its ID
         public async Task<Product> GetProductByIdAsync(int productId)
