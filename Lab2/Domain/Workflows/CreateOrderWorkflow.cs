@@ -38,6 +38,7 @@ namespace Lab2.Domain.Workflows
                 {
                     Console.WriteLine("saving order");
                     await orderlineRepository.AddOrderLineAsync(payedOrder);
+                    await productsRepository.UpdateStockAsync(payedOrder);
                 }
 
 
@@ -69,6 +70,13 @@ namespace Lab2.Domain.Workflows
                 var productIdsToCheck = new List<string> { productId.ToString() };
                 return await productsRepository.GetAvailableStockAsync(productIdsToCheck);
             };
+
+            /*Func<List<ProductId>, Task<Dictionary<ProductId, decimal>>> GetProductPrices = async productIds =>
+            {
+                // Fetch prices from the repository (assuming a method like GetPricesAsync exists)
+                var prices = await productsRepository.GetPricesAsync(productIds);
+                return prices.ToDictionary(p => new ProductId(p.ProductId), p => p.Price);
+            };*/
             
             
             UnvalidatedOrder unvalidatedOrderLine = new(command.InputOrderLines);

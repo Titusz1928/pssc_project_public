@@ -68,39 +68,53 @@ namespace Lab2
                     .AddProvider(new Microsoft.Extensions.Logging.Debug.DebugLoggerProvider()));
         }
         
+        private static readonly Dictionary<int, float> ProductPrices = new()
+        {
+            { 1, 10.5f }, // ProductId 1 -> Price 10.5
+            { 2, 20.0f }, // ProductId 2 -> Price 20.0
+            // Add more product-price mappings as needed
+        };
+        
         private static List<UnvalidatedOrderLine> ReadListOfOrders()
         {
-            List<UnvalidatedOrderLine> listOfGrades = [];
+            List<UnvalidatedOrderLine> listOfOrders = new();
             do
             {
-
-                string? productId = ReadValue("Product Id: ");
-                if (string.IsNullOrEmpty(productId))
+                // Read ProductId
+                string? productIdInput = ReadValue("Product Id: ");
+                if (string.IsNullOrEmpty(productIdInput))
                 {
                     break;
                 }
-                
+
+                if (!int.TryParse(productIdInput, out int productId) || !ProductPrices.ContainsKey(productId))
+                {
+                    Console.WriteLine("Invalid Product Id or Product not found.");
+                    continue;
+                }
+
+                // Read OrderId
                 string? orderId = ReadValue("Order Id: ");
                 if (string.IsNullOrEmpty(orderId))
                 {
                     break;
                 }
-                
-                string? quantity = ReadValue("Quantity: ");
-                if (string.IsNullOrEmpty(quantity))
+
+                // Read Quantity
+                string? quantityInput = ReadValue("Quantity: ");
+                if (string.IsNullOrEmpty(quantityInput) || !int.TryParse(quantityInput, out int quantity))
                 {
-                    break;
-                }
-                
-                string? price = ReadValue("Price: ");
-                if (string.IsNullOrEmpty(quantity))
-                {
-                    break;
+                    Console.WriteLine("Invalid Quantity.");
+                    continue;
                 }
 
-                listOfGrades.Add(new(orderId, productId,quantity,price));
+                // Assign price based on ProductId
+                float price = ProductPrices[productId];
+
+                // Add the order line to the list
+                listOfOrders.Add(new(orderId, productIdInput, quantity.ToString(), price.ToString()));
             } while (true);
-            return listOfGrades;
+            return listOfOrders;
         }
         
         private static string? ReadValue(string prompt)

@@ -53,6 +53,59 @@ namespace Lab2.Data.Repositories
             return new Quantity(product?.Stoc ?? 0);  // Use null-coalescing to return 0 if the product is not found
         }
 
+        public async Task UpdateStockAsync(Order.IOrder payedOrder)
+        {
+            // Cast to PayedOrder to access the details of the order lines
+            if (payedOrder is Order.PayedOrder payedOrderDetails)
+            {
+                foreach (var orderLine in payedOrderDetails.OrderList)
+                {
+                    // Fetch the product matching the ProductId from the database
+                    var product = await dbContext.Products.FirstOrDefaultAsync(p => p.ProductId == orderLine.ProductId.Value);
+
+                    if (product != null)
+                    {
+                        // Subtract the ordered quantity from the stock
+                        product.Stoc -= orderLine.Quantity.Value;
+
+                        if (product.Stoc < 0)
+                        {
+                            // Handle stock underflow, e.g., throw an exception or log a warning
+                            throw new InvalidOperationException($"Stock for Product ID {product.ProductId} cannot be negative.");
+                        }
+                    }
+                    else
+                    {
+                        // Handle case where product is not found
+                        throw new KeyNotFoundException($"Product with ID {orderLine.ProductId.Value} not found.");
+                    }
+                }
+
+                // Save changes to the database after updating all affected products
+                await dbContext.SaveChangesAsync();
+            }
+            else
+            {
+                throw new InvalidOperationException("Order must be a PayedOrder to update stock.");
+            }
+        }
+        
+        /*public async Task<List<(int ProductId, decimal Price)>> GetPricesAsync(IEnumerable<string> productIdsToCheck)
+        {
+            var productIdsList = productIdsToCheck.ToList(); // Ensure it's a list
+
+            // Query the database for matching product IDs
+            var productsWithPrices = await dbContext.Products
+                .AsNoTracking() // Optimize performance for read-only operations
+                .Where(p => productIdsList.Contains(p.ProductId.ToString())) // Filter by provided product IDs
+                .Select(p => new { p.ProductId, p.Price }) // Select only necessary fields
+                .ToListAsync();
+
+            // Return as a list of tuples (ProductId, Price)
+            return productsWithPrices.Select(p => (p.ProductId, p.Price)).ToList();
+        }*/
+
+
 
 
 
