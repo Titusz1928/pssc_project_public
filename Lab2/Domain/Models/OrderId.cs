@@ -1,7 +1,5 @@
 ﻿using Lab2.Domain.Exceptions;
 
-namespace Lab2.Domain.Models;
-
 public record OrderId
 {
     public int Value { get; }
@@ -42,5 +40,17 @@ public record OrderId
         return isValid;
     }
 
-    private static bool IsValid(int numericOrderId) => numericOrderId > 0;
+    private static bool IsValid(int numericOrderId) => numericOrderId > -1;
+
+    // Implicit conversion from int to OrderId
+    public static implicit operator OrderId(int value)
+    {
+        return new OrderId(value);
+    }
+
+    // Implicit conversion from OrderId to int
+    public static implicit operator int(OrderId orderId)
+    {
+        return orderId.Value;
+    }
 }

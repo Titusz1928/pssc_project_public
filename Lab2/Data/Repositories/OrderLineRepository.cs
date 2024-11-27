@@ -23,7 +23,7 @@ namespace Lab2.Data.Repositories
                 (
                     from o in dbContext.Orders
                     join p in dbContext.Products on o.ProductId equals p.ProductId
-                    select new { p.Code, o.OrderId, o.ProductId, o.Quantity, o.Price, o.Total }
+                    select new { p.Code, o.ProductId, o.Quantity, o.Total, o.OrderId }
                 ).AsNoTracking()
                 .ToListAsync();
 
@@ -32,7 +32,6 @@ namespace Lab2.Data.Repositories
                     OrderId: new OrderId(result.OrderId),
                     ProductId: new ProductId(result.ProductId),
                     Quantity: new Quantity(result.Quantity),
-                    Price: new Price(result.Price),
                     Total: new Total(result.Total)
                 )).ToList();
 
@@ -51,17 +50,14 @@ namespace Lab2.Data.Repositories
                     p.Code,
                     o.ProductId,
                     o.Quantity,
-                    o.Price,
-                    o.OrderId,
                     o.Total
                 }
             ).AsNoTracking().ToListAsync();
 
             return orderLines.Select(o => new PayedOrderLine(
-                OrderId: new OrderId(o.OrderId),
+                OrderId:new OrderId(o.OrderLineId),
                 ProductId: new ProductId(o.ProductId),
                 Quantity: new Quantity(o.Quantity),
-                Price: new Price(o.Price),
                 Total: new Total(o.Total))
             {
                 OrderLineId = o.OrderLineId,
@@ -82,8 +78,6 @@ namespace Lab2.Data.Repositories
                     p.Code,
                     o.ProductId,
                     o.Quantity,
-                    o.Price,
-                    o.OrderId,
                     o.Total
                 }
             ).AsNoTracking().FirstOrDefaultAsync();
@@ -91,10 +85,9 @@ namespace Lab2.Data.Repositories
             if (orderLine == null) return null;
 
             return new PayedOrderLine(
-                OrderId: new OrderId(orderLine.OrderId),
+                OrderId: new OrderId(orderLine.OrderLineId),
                 ProductId: new ProductId(orderLine.ProductId),
                 Quantity: new Quantity(orderLine.Quantity),
-                Price: new Price(orderLine.Price),
                 Total: new Total(orderLine.Total))
             {
                 OrderLineId = orderLine.OrderLineId,
@@ -110,11 +103,10 @@ namespace Lab2.Data.Repositories
                 {
                     var orderLineDto = new OrderLineDto
                     {
+                        OrderId = orderLine.OrderId ?? 0,
                         ProductId = orderLine.ProductId?.Value ?? 0, // Handle nullable values
                         Quantity = orderLine.Quantity?.Value ?? 0,  // Handle nullable values
-                        Price = orderLine.Price?.Value ?? 0f,       // Handle nullable values
                         Total = orderLine.Total?.Value ?? 0f,       // Handle nullable values
-                        OrderId = orderLine.OrderId?.Value ?? 0     // Handle nullable values
                     };
 
                     dbContext.Orders.Add(orderLineDto); // Ensure the DbSet is named "OrderLines"
@@ -137,9 +129,7 @@ namespace Lab2.Data.Repositories
                 OrderLineId = orderLine.OrderLineId,
                 ProductId = orderLine.ProductId.Value,
                 Quantity = orderLine.Quantity.Value,
-                Price = orderLine.Price.Value,
                 Total = orderLine.Total.Value,
-                OrderId = orderLine.OrderId.Value
             };
 
             dbContext.Entry(orderLineDto).State = EntityState.Modified;

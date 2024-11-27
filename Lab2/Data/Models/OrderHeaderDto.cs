@@ -4,5 +4,5 @@ public class OrderHeaderDto
 {
     public int OrderId { get; set; }
     public string Address { get; set; }
-    public float Total { get; set; }
+    public string  Name { get; set; }
 }

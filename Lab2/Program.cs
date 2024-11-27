@@ -16,7 +16,7 @@ namespace Lab2
     internal class Program
     {
         
-        private static readonly string ConnectionString = "Server=localhost;Database=pssc2;Uid=root;Pwd=iNdigo24H+9jq!Zy3;";
+        private static readonly string ConnectionString = "Server=localhost;Database=pssc3;Uid=root;Pwd=iNdigo24H+9jq!Zy3;";
 
 
         private static async Task Main(string[] args)
@@ -32,13 +32,15 @@ namespace Lab2
             
             ProductsRepository productsRepository = new(orderLineContext);
             OrderLineRepository orderLineRepository = new(orderLineContext);
+            OrderHeaderRepository orderHeaderRepository = new(orderLineContext);
             
             //get user input
             UnvalidatedOrderLine[] listoforders = ReadListOfOrders().ToArray();
+            OrderHeader header = ReadOrderHeader();
             
             //execute domain workflow
-            CreateOrderCommand command = new(listoforders);
-            CreateOrderWorkflow workflow = new(productsRepository, orderLineRepository, logger);
+            CreateOrderCommand command = new(listoforders, header);
+            CreateOrderWorkflow workflow = new(productsRepository, orderLineRepository,orderHeaderRepository, logger);
             IOrderCreatedEvent result = await workflow.ExecuteAsync(command);
 
             string consoleMessage = result switch
@@ -75,6 +77,13 @@ namespace Lab2
             // Add more product-price mappings as needed
         };
         
+        private static OrderHeader ReadOrderHeader()
+        {
+            string name = ReadValue("Customer Name: ") ?? string.Empty;
+            string city = ReadValue("Customer City: ") ?? string.Empty;
+            return new OrderHeader(name, city,0);
+        }
+        
         private static List<UnvalidatedOrderLine> ReadListOfOrders()
         {
             List<UnvalidatedOrderLine> listOfOrders = new();
@@ -92,13 +101,7 @@ namespace Lab2
                     Console.WriteLine("Invalid Product Id or Product not found.");
                     continue;
                 }
-
-                // Read OrderId
-                string? orderId = ReadValue("Order Id: ");
-                if (string.IsNullOrEmpty(orderId))
-                {
-                    break;
-                }
+                
 
                 // Read Quantity
                 string? quantityInput = ReadValue("Quantity: ");
@@ -112,7 +115,7 @@ namespace Lab2
                 float price = ProductPrices[productId];
 
                 // Add the order line to the list
-                listOfOrders.Add(new(orderId, productIdInput, quantity.ToString(), price.ToString()));
+                listOfOrders.Add(new("0",productIdInput, quantity.ToString(), price.ToString()));
             } while (true);
             return listOfOrders;
         }

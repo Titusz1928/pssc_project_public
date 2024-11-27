@@ -17,16 +17,46 @@ namespace Lab2.Domain.Operations{
 
        protected override IOrder OnUnvalidated(UnvalidatedOrder unvalidatedOrder)
        {
-           (List<ValidatedOrderLine> validatedOrderLines, IEnumerable<string> validationErrors)=ValidateListOfOrderLines(unvalidatedOrder);
+           // Validate the order lines
+           (List<ValidatedOrderLine> validatedOrderLines, IEnumerable<string> orderLineErrors) = ValidateListOfOrderLines(unvalidatedOrder);
+
+           // Validate the header
+           (OrderHeader? validatedHeader, IEnumerable<string> headerErrors) = ValidateOrderHeader(unvalidatedOrder.Header);
+
+           // Combine all errors
+           var validationErrors = orderLineErrors.Concat(headerErrors).ToList();
 
            if (validationErrors.Any())
            {
-               return new InvalidOrder(unvalidatedOrder.OrderList, validationErrors);
+               return new InvalidOrder(unvalidatedOrder.OrderList, validationErrors, unvalidatedOrder.Header);
            }
            else
            {
-               return new ValidatedOrder(validatedOrderLines);
+               return new ValidatedOrder(validatedOrderLines, validatedHeader!); // Header is guaranteed valid here
            }
+       }
+       
+       private (OrderHeader?, IEnumerable<string>) ValidateOrderHeader(OrderHeader? header)
+       {
+           var errors = new List<string>();
+
+           if (header == null)
+           {
+               errors.Add("Order header is missing.");
+               return (null, errors);
+           } 
+
+           if (string.IsNullOrWhiteSpace(header.Name))
+           {
+               errors.Add("Name in the order header cannot be empty.");
+           }
+
+           if (string.IsNullOrWhiteSpace(header.Address))
+           {
+               errors.Add("Address in the order header cannot be empty.");
+           }
+
+           return errors.Any() ? (null, errors) : (header, errors);
        }
 
        private (List<ValidatedOrderLine>, IEnumerable<string>) ValidateListOfOrderLines(

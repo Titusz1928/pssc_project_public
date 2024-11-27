@@ -13,7 +13,7 @@ namespace Lab2.Domain.Operations{
             calculatedOrder.OrderList.Aggregate(csv, (export, order) =>
                 export.AppendLine(GenerateCsvLine(order)));
             
-            PayedOrder payedorder = new(calculatedOrder.OrderList, csv.ToString(),DateTime.Now);
+            PayedOrder payedorder = new(calculatedOrder.OrderList, calculatedOrder.Header, csv.ToString(),DateTime.Now);
            return payedorder; 
         }
 

@@ -17,7 +17,8 @@ namespace Lab2.Domain.Operations
                     .Select(validOrder => CalculateAndMatchOrderLine(existingOrderLines, validOrder))
                     .ToList()
                     .AsReadOnly()
-            );
+            ,validOrderLine.Header
+                );
 
         private static CalculatedOrderLine CalculateAndMatchOrderLine(List<CalculatedOrderLine>? existingOrderLines, ValidatedOrderLine validOrderLine)
         {
@@ -33,7 +34,6 @@ namespace Lab2.Domain.Operations
                 validOrderLine.OrderId,
                 validOrderLine.ProductId,
                 validOrderLine.Quantity,
-                validOrderLine.Price,
                 total
             );
         }

@@ -13,7 +13,8 @@ public class OrderLineContext : DbContext
 
     public DbSet<OrderLineDto> Orders { get; set; }
     public DbSet<ProductDto> Products { get; set; }
-
+    
+    public DbSet<OrderHeaderDto> OrderHeaders { get; set; }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         // Configure ProductDto
@@ -21,11 +22,18 @@ public class OrderLineContext : DbContext
             .Entity<ProductDto>()
             .ToTable("Product")
             .HasKey(s => s.ProductId);
+        
+        // Configure ProductDto
+        modelBuilder
+            .Entity<OrderHeaderDto>()
+            .ToTable("OrderHeader")
+            .HasKey(s => s.OrderId);
 
         // Configure OrderLineDto
         modelBuilder
             .Entity<OrderLineDto>(entityBuilder =>
             {
+                
                 entityBuilder
                     .Property(g => g.OrderId)
                     .HasColumnType("int");
@@ -33,10 +41,7 @@ public class OrderLineContext : DbContext
                 entityBuilder
                     .Property(g => g.Quantity)
                     .HasColumnType("int");
-
-                entityBuilder
-                    .Property(g => g.Price)
-                    .HasColumnName("Price");
+                
 
                 entityBuilder
                     .Property(g => g.Total)
