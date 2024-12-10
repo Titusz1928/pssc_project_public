@@ -249,6 +249,10 @@ C:\Users\Boros Titusz\RiderProjects\lab8_mysql_version\Lab2\bin\Debug\net8.0\Sys
 C:\Users\Boros Titusz\RiderProjects\lab8_mysql_version\Lab2\bin\Debug\net8.0\System.Text.Encodings.Web.dll
 C:\Users\Boros Titusz\RiderProjects\lab8_mysql_version\Lab2\bin\Debug\net8.0\System.Text.Json.dll
 C:\Users\Boros Titusz\RiderProjects\lab8_mysql_version\Lab2\bin\Debug\net8.0\runtimes\browser\lib\net8.0\System.Text.Encodings.Web.dll
+C:\Users\Boros Titusz\RiderProjects\lab8_mysql_version\Lab2\bin\Debug\net8.0\Lab2.Data.dll
+C:\Users\Boros Titusz\RiderProjects\lab8_mysql_version\Lab2\bin\Debug\net8.0\Lab2.Domain.dll
+C:\Users\Boros Titusz\RiderProjects\lab8_mysql_version\Lab2\bin\Debug\net8.0\Lab2.Data.pdb
+C:\Users\Boros Titusz\RiderProjects\lab8_mysql_version\Lab2\bin\Debug\net8.0\Lab2.Domain.pdb
 C:\Users\Boros Titusz\RiderProjects\lab8_mysql_version\Lab2\obj\Debug\net8.0\Lab2.csproj.AssemblyReference.cache
 C:\Users\Boros Titusz\RiderProjects\lab8_mysql_version\Lab2\obj\Debug\net8.0\Lab2.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\Boros Titusz\RiderProjects\lab8_mysql_version\Lab2\obj\Debug\net8.0\Lab2.AssemblyInfoInputs.cache

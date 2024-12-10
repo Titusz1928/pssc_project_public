@@ -4,14 +4,88 @@
     "C:\\Users\\Boros Titusz\\RiderProjects\\lab8_mysql_version\\Lab2\\Lab2.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Boros Titusz\\RiderProjects\\lab8_mysql_version\\Lab2\\Lab2.csproj": {
+    "C:\\Users\\Boros Titusz\\RiderProjects\\lab8_mysql_version\\Lab2.Data\\Lab2.Data.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Boros Titusz\\RiderProjects\\lab8_mysql_version\\Lab2\\Lab2.csproj",
-        "projectName": "Lab2",
-        "projectPath": "C:\\Users\\Boros Titusz\\RiderProjects\\lab8_mysql_version\\Lab2\\Lab2.csproj",
+        "projectUniqueName": "C:\\Users\\Boros Titusz\\RiderProjects\\lab8_mysql_version\\Lab2.Data\\Lab2.Data.csproj",
+        "projectName": "Lab2.Data",
+        "projectPath": "C:\\Users\\Boros Titusz\\RiderProjects\\lab8_mysql_version\\Lab2.Data\\Lab2.Data.csproj",
         "packagesPath": "C:\\Users\\Boros Titusz\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Boros Titusz\\RiderProjects\\lab8_mysql_version\\Lab2\\obj\\",
+        "outputPath": "C:\\Users\\Boros Titusz\\RiderProjects\\lab8_mysql_version\\Lab2.Data\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\Boros Titusz\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {
+              "C:\\Users\\Boros Titusz\\RiderProjects\\lab8_mysql_version\\Lab2.Domain\\Lab2.Domain.csproj": {
+                "projectPath": "C:\\Users\\Boros Titusz\\RiderProjects\\lab8_mysql_version\\Lab2.Domain\\Lab2.Domain.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        }
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
+            "Pomelo.EntityFrameworkCore.MySql": {
+              "target": "Package",
+              "version": "[8.0.2, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Users\\Boros Titusz\\.dotnet\\sdk\\8.0.401/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\Boros Titusz\\RiderProjects\\lab8_mysql_version\\Lab2.Domain\\Lab2.Domain.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\Boros Titusz\\RiderProjects\\lab8_mysql_version\\Lab2.Domain\\Lab2.Domain.csproj",
+        "projectName": "Lab2.Domain",
+        "projectPath": "C:\\Users\\Boros Titusz\\RiderProjects\\lab8_mysql_version\\Lab2.Domain\\Lab2.Domain.csproj",
+        "packagesPath": "C:\\Users\\Boros Titusz\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Boros Titusz\\RiderProjects\\lab8_mysql_version\\Lab2.Domain\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -49,6 +123,87 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[6.0.10, )"
+            },
+            "Microsoft.Extensions.Logging": {
+              "target": "Package",
+              "version": "[9.0.0, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Users\\Boros Titusz\\.dotnet\\sdk\\8.0.401/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\Boros Titusz\\RiderProjects\\lab8_mysql_version\\Lab2\\Lab2.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\Boros Titusz\\RiderProjects\\lab8_mysql_version\\Lab2\\Lab2.csproj",
+        "projectName": "Lab2",
+        "projectPath": "C:\\Users\\Boros Titusz\\RiderProjects\\lab8_mysql_version\\Lab2\\Lab2.csproj",
+        "packagesPath": "C:\\Users\\Boros Titusz\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Boros Titusz\\RiderProjects\\lab8_mysql_version\\Lab2\\obj\\",
+        "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\Boros Titusz\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0": {
+            "targetAlias": "net8.0",
+            "projectReferences": {
+              "C:\\Users\\Boros Titusz\\RiderProjects\\lab8_mysql_version\\Lab2.Data\\Lab2.Data.csproj": {
+                "projectPath": "C:\\Users\\Boros Titusz\\RiderProjects\\lab8_mysql_version\\Lab2.Data\\Lab2.Data.csproj"
+              },
+              "C:\\Users\\Boros Titusz\\RiderProjects\\lab8_mysql_version\\Lab2.Domain\\Lab2.Domain.csproj": {
+                "projectPath": "C:\\Users\\Boros Titusz\\RiderProjects\\lab8_mysql_version\\Lab2.Domain\\Lab2.Domain.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        }
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "dependencies": {
             "Microsoft.Extensions.Logging.Console": {
               "target": "Package",
               "version": "[9.0.0, )"
@@ -59,7 +214,7 @@
             },
             "Pomelo.EntityFrameworkCore.MySql": {
               "target": "Package",
-              "version": "[9.0.0-preview.1, )"
+              "version": "[8.0.2, )"
             }
           },
           "imports": [
