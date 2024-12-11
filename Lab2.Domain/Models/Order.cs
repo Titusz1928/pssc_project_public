@@ -54,6 +54,13 @@
 
             public IReadOnlyCollection<CalculatedOrderLine> OrderList { get; }
             public OrderHeader Header { get; }
+            
+            public override string ToString()
+            {
+                // Join all order lines as a string and include the header
+                var orderLines = string.Join(", ", OrderList.Select(line => line.ToString()));
+                return $"Header: {Header}, OrderList: [{orderLines}]";
+            }
         }
 
         public record PayedOrder : IOrder

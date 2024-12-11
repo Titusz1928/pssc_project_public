@@ -74,7 +74,7 @@ namespace Lab2.Domain.Workflows
                 await productsRepository.UpdateStockAsync(updatedPayedOrder);
             }
 
-            return order.ToEvent();
+            return OrderCreatedEvent.ToEvent(order);
         }
         catch (Exception ex)
         {

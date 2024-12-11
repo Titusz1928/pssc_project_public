@@ -29,6 +29,8 @@ namespace Lab2.API
             builder.Services.AddTransient<IProductsRepository, ProductsRepository>();
             builder.Services.AddTransient<IOrderHeaderRepository, OrderHeaderRepository>();
             builder.Services.AddTransient<CreateOrderWorkflow>();
+            builder.Services.AddTransient<CalculateOrderWorkflow>();
+            builder.Services.AddTransient<PayOrderWorkflow>();
 
             builder.Services.AddHttpClient();
             
