@@ -48,3 +48,5 @@ C:\Users\Boros Titusz\RiderProjects\lab8_mysql_version\API\obj\Debug\net8.0\refi
 C:\Users\Boros Titusz\RiderProjects\lab8_mysql_version\API\obj\Debug\net8.0\API.pdb
 C:\Users\Boros Titusz\RiderProjects\lab8_mysql_version\API\obj\Debug\net8.0\API.genruntimeconfig.cache
 C:\Users\Boros Titusz\RiderProjects\lab8_mysql_version\API\obj\Debug\net8.0\ref\API.dll
+C:\Users\Boros Titusz\RiderProjects\lab8_mysql_version\API\bin\Debug\net8.0\Polly.dll
+C:\Users\Boros Titusz\RiderProjects\lab8_mysql_version\API\bin\Debug\net8.0\Polly.Core.dll

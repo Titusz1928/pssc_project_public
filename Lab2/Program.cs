@@ -16,7 +16,7 @@ namespace Lab2
     internal class Program
     {
         
-        private static readonly string ConnectionString = "Server=localhost;Database=pssc3;Uid=root;Pwd=iNdigo24H+9jq!Zy3;";
+        private static readonly string ConnectionString = "";
 
 
         private static async Task Main(string[] args)

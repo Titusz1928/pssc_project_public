@@ -1,23 +1,29 @@
 ﻿using System.Collections.ObjectModel;
+using System.Net;
+using System.Text;
+using System.Text.Json;
 using Lab2.API.Models;
 using Lab2.Domain.Models;
 using Lab2.Domain.Repositories;
 using Lab2.Domain.Workflows;
 using Microsoft.AspNetCore.Mvc;
+using Polly;
 
 namespace Lab2.API.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class OrdersController : ControllerBase
+    public class OrdersController : ControllerBase 
     {
         private readonly ILogger<OrdersController> _logger;
         private readonly CreateOrderWorkflow _createOrderWorkflow;
+        private readonly PlaceOrderWorkflow _placeOrderWorkflow;
 
-        public OrdersController(ILogger<OrdersController> logger, CreateOrderWorkflow createOrderWorkflow)
+        public OrdersController(ILogger<OrdersController> logger, CreateOrderWorkflow createOrderWorkflow, PlaceOrderWorkflow placeOrderWorkflow)
         {
             _logger = logger;
             _createOrderWorkflow = createOrderWorkflow;
+            _placeOrderWorkflow = placeOrderWorkflow;
         }
 
         // Endpoint to retrieve all orders
@@ -47,7 +53,9 @@ namespace Lab2.API.Controllers
             // Create header data using user input
             OrderHeader header = new OrderHeader(request.CustomerName, request.City, 0);
 
+            //CreateOrderCommand command = new(unvalidatedOrderLines, header);
             CreateOrderCommand command = new(unvalidatedOrderLines, header);
+            
             OrderCreatedEvent.IOrderCreatedEvent workflowResult = await _createOrderWorkflow.ExecuteAsync(command);
 
             IActionResult response = workflowResult switch
@@ -59,6 +67,67 @@ namespace Lab2.API.Controllers
 
             return response;
         }
+        
+        // Endpoint to place an order
+[HttpPost("PlaceOrder")]
+public async Task<IActionResult> PlaceOrder([FromBody] PlaceOrderRequest request)
+{
+    ReadOnlyCollection<UnvalidatedOrderLine> unvalidatedOrderLines = request.InputOrders
+        .Select(MapInputOrderToUnvalidatedOrderLine)
+        .ToList()
+        .AsReadOnly();
+
+    // Create header data using user input
+    OrderHeader header = new OrderHeader(request.CustomerName, request.City, 0);
+
+    // Create the PlaceOrderCommand
+    PlaceOrderCommand command = new(unvalidatedOrderLines, header);
+
+    // Execute the PlaceOrder workflow
+    OrderPlacedEvent.IOrderPlacedEvent workflowResult = await _placeOrderWorkflow.ExecuteAsync(command);
+
+    IActionResult response;
+
+    // Using an explicit switch expression to handle different event types
+    switch (workflowResult)
+    {
+        case OrderPlacedEvent.OrderPlacingSucceededEvent succeededEvent:
+            {
+                // Extract data from PayedOrder and send to Delivery API
+                var payedOrderHeader = new OrderHeader(
+                    succeededEvent.orderHeader.Name,  // Correct access to orderHeader property
+                    succeededEvent.orderHeader.Address,
+                    succeededEvent.orderHeader.OrderId
+                );
+
+                // Call the Delivery Workflow API
+                var deliveryApiResult = await SendToDeliveryWorkflowAsync(payedOrderHeader);
+
+                //if (deliveryApiResult.IsSuccessStatusCode)
+                if(true)
+                {
+                    response = Ok(new { Csv = succeededEvent.Csv });
+                }
+                else
+                {
+                    // Retry logic can go here if needed
+                    response = StatusCode((int)deliveryApiResult.StatusCode, "Failed to notify delivery workflow.");
+                }
+                break;
+            }
+
+        case OrderPlacedEvent.OrderPlacingFailedEvent failedEvent:
+            response = BadRequest(failedEvent.Reasons);
+            break;
+
+        default:
+            throw new NotImplementedException();
+    }
+
+    return response;
+}
+
+
 
         // Helper method to map InputOrder to UnvalidatedOrderLine
         private static UnvalidatedOrderLine MapInputOrderToUnvalidatedOrderLine(InputOrder order)
@@ -80,5 +149,53 @@ namespace Lab2.API.Controllers
             public string City { get; set; }
             public InputOrder[] InputOrders { get; set; }
         }
+        
+        public class PlaceOrderRequest
+        {
+            public string CustomerName { get; set; }
+            public string City { get; set; }
+            public InputOrder[] InputOrders { get; set; }
+        }
+        
+        private async Task<HttpResponseMessage> SendToDeliveryWorkflowAsync(OrderHeader orderHeader)
+        {
+            using var client = new HttpClient();
+            var deliveryApiUrl = "https://your-delivery-api-url.com/api/Delivery";
+
+            var payload = new
+            {
+                OrderId = orderHeader.OrderId.ToString(),
+                Name = orderHeader.Name,
+                Address = orderHeader.Address
+            };
+
+            var content = new StringContent(
+                JsonSerializer.Serialize(payload),
+                Encoding.UTF8,
+                "application/json"
+            );
+
+            // Define the retry policy with exponential backoff
+            var retryPolicy = Policy
+                .Handle<HttpRequestException>()
+                .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
+
+            // Execute the HTTP request with retry policy
+            var response = await retryPolicy.ExecuteAsync(async () =>
+            {
+                var apiResponse = await client.PostAsync(deliveryApiUrl, content);
+                if (apiResponse.IsSuccessStatusCode)
+                {
+                    return apiResponse;
+                }
+
+                // If the response is not successful, throw an exception to trigger the retry
+                apiResponse.EnsureSuccessStatusCode();
+                return apiResponse;
+            });
+
+            return response;
+        }
+        
     }
 }

@@ -1,3 +1,4 @@
+using Lab2.API.Clients;
 using Lab2.Data;
 using Lab2.Data.Repositories;
 using Lab2.Domain.Repositories;
@@ -31,6 +32,7 @@ namespace Lab2.API
             builder.Services.AddTransient<CreateOrderWorkflow>();
             builder.Services.AddTransient<CalculateOrderWorkflow>();
             builder.Services.AddTransient<PayOrderWorkflow>();
+            builder.Services.AddTransient<PlaceOrderWorkflow>();
 
             builder.Services.AddHttpClient();
             
@@ -62,6 +64,15 @@ namespace Lab2.API
             app.Run();
             
 
+        }
+        
+        public void ConfigureServices(IServiceCollection services)
+        {
+            services.AddHttpClient<MyApiClient>(client =>
+            {
+                client.BaseAddress = new Uri("https://api.example.com/");
+                client.DefaultRequestHeaders.Add("Accept", "application/json");
+            });
         }
 
     }

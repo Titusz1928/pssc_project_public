@@ -6,6 +6,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using static Lab2.Domain.Models.Order;
 using static Lab2.Domain.Models.OrderCreatedEvent;
 
+
+// FOR CONSOLE APP
+
+
 namespace Lab2.Domain.Workflows
 {
    public class CreateOrderWorkflow
