@@ -1,0 +1,16 @@
+C:\Users\Boros Titusz\RiderProjects\lab8_mysql_version\Lab2.Data\bin\Debug\net8.0\Lab2.Data.deps.json
+C:\Users\Boros Titusz\RiderProjects\lab8_mysql_version\Lab2.Data\bin\Debug\net8.0\Lab2.Data.dll
+C:\Users\Boros Titusz\RiderProjects\lab8_mysql_version\Lab2.Data\bin\Debug\net8.0\Lab2.Data.pdb
+C:\Users\Boros Titusz\RiderProjects\lab8_mysql_version\Lab2.Data\bin\Debug\net8.0\Lab2.Domain.dll
+C:\Users\Boros Titusz\RiderProjects\lab8_mysql_version\Lab2.Data\bin\Debug\net8.0\Lab2.Domain.pdb
+C:\Users\Boros Titusz\RiderProjects\lab8_mysql_version\Lab2.Data\obj\Debug\net8.0\Lab2.Data.csproj.AssemblyReference.cache
+C:\Users\Boros Titusz\RiderProjects\lab8_mysql_version\Lab2.Data\obj\Debug\net8.0\Lab2.Data.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Boros Titusz\RiderProjects\lab8_mysql_version\Lab2.Data\obj\Debug\net8.0\Lab2.Data.AssemblyInfoInputs.cache
+C:\Users\Boros Titusz\RiderProjects\lab8_mysql_version\Lab2.Data\obj\Debug\net8.0\Lab2.Data.AssemblyInfo.cs
+C:\Users\Boros Titusz\RiderProjects\lab8_mysql_version\Lab2.Data\obj\Debug\net8.0\Lab2.Data.csproj.CoreCompileInputs.cache
+C:\Users\Boros Titusz\RiderProjects\lab8_mysql_version\Lab2.Data\obj\Debug\net8.0\Lab2.Data.sourcelink.json
+C:\Users\Boros Titusz\RiderProjects\lab8_mysql_version\Lab2.Data\obj\Debug\net8.0\Lab2.Data.csproj.Up2Date
+C:\Users\Boros Titusz\RiderProjects\lab8_mysql_version\Lab2.Data\obj\Debug\net8.0\Lab2.Data.dll
+C:\Users\Boros Titusz\RiderProjects\lab8_mysql_version\Lab2.Data\obj\Debug\net8.0\refint\Lab2.Data.dll
+C:\Users\Boros Titusz\RiderProjects\lab8_mysql_version\Lab2.Data\obj\Debug\net8.0\Lab2.Data.pdb
+C:\Users\Boros Titusz\RiderProjects\lab8_mysql_version\Lab2.Data\obj\Debug\net8.0\ref\Lab2.Data.dll
