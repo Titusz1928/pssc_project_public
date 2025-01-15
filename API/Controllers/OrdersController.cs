@@ -4,6 +4,7 @@ using System.Text;
 using System.Text.Json;
 using Lab2.API.Models;
 using Lab2.Domain.Models;
+using Lab2.Domain.Models.AwbContactInfo;
 using Lab2.Domain.Repositories;
 using Lab2.Domain.Workflows;
 using Microsoft.AspNetCore.Mvc;
@@ -99,9 +100,10 @@ public async Task<IActionResult> PlaceOrder([FromBody] PlaceOrderRequest request
                     succeededEvent.orderHeader.Address,
                     succeededEvent.orderHeader.OrderId
                 );
+                
 
                 // Call the Delivery Workflow API
-                var deliveryApiResult = await SendToDeliveryWorkflowAsync(payedOrderHeader);
+                var deliveryApiResult = await SendToDeliveryWorkflowAsync(payedOrderHeader, succeededEvent.Price, succeededEvent.CreatedDate);
 
                 //if (deliveryApiResult.IsSuccessStatusCode)
                 if(true)
@@ -157,20 +159,36 @@ public async Task<IActionResult> PlaceOrder([FromBody] PlaceOrderRequest request
             public InputOrder[] InputOrders { get; set; }
         }
         
-        private async Task<HttpResponseMessage> SendToDeliveryWorkflowAsync(OrderHeader orderHeader)
+        private async Task<HttpResponseMessage> SendToDeliveryWorkflowAsync(OrderHeader orderHeader, Price price, DateTime createdDate)
         {
             using var client = new HttpClient();
-            var deliveryApiUrl = "https://your-delivery-api-url.com/api/Delivery";
+            var deliveryApiUrl = "http://localhost:5246/api/AwbGenerator/generate";
 
-            var payload = new
-            {
-                OrderId = orderHeader.OrderId.ToString(),
-                Name = orderHeader.Name,
-                Address = orderHeader.Address
-            };
+            var phoneNr = "+734400184";
+            // Ensure the phone number is directly passed as a plain string
+            var unvalidatedAwbContactInfo = new UnvalidatedAwbContactInfo(
+                "email@gmail.com",
+                phoneNr  // No need for Unicode encoding, just use the + directly
+            );
+
+            var awbOrderInfo = new AwbOrderInfo(
+                orderHeader,
+                price,
+                createdDate
+            );
+
+            // Create UnvalidatedAwb object to send in the request
+            var unvalidatedAwb = new Awb.UnvalidatedAwb(unvalidatedAwbContactInfo, awbOrderInfo);
+
+            // Serialize the UnvalidatedAwb object to JSON
+            var jsonPayload = JsonSerializer.Serialize(new { UnvalidatedAwb = unvalidatedAwb });
+
+            // Log the serialized JSON to the console
+            Console.WriteLine("Serialized JSON Payload:");
+            Console.WriteLine(jsonPayload);
 
             var content = new StringContent(
-                JsonSerializer.Serialize(payload),
+                jsonPayload,
                 Encoding.UTF8,
                 "application/json"
             );
@@ -196,6 +214,8 @@ public async Task<IActionResult> PlaceOrder([FromBody] PlaceOrderRequest request
 
             return response;
         }
+
+
         
     }
 }
